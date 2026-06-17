@@ -51,5 +51,5 @@ SHELL ["/bin/bash", "-c"]
 CMD ["/bin/bash"]
 
 # Install additional requirements defined in requirements.txt
-COPY ../requirements.txt .
-RUN pip install --break-system-packages -r requirements.txt
+#COPY ../requirements.txt .
+#RUN pip install --break-system-packages -r requirements.txt
