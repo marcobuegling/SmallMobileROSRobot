@@ -1,0 +1,16 @@
+motor_controller:
+  ros__parameters:
+    base_speed: 100.0
+    speed_step: 0.1
+    steering_step: 0.2
+    pwm_frequency: 1000.0
+
+ultrasonic_sensor:
+  ros__parameters:
+    publish_rate_hz: 20.0
+    emergency_stop_distance: 15.0
+
+line_tracker:
+  ros__parameters:
+    enabled: false
+    steering_step: 0.2
