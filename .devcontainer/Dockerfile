@@ -51,5 +51,7 @@ SHELL ["/bin/bash", "-c"]
 CMD ["/bin/bash"]
 
 # Install additional requirements defined in requirements.txt
-#COPY ../requirements.txt .
-#RUN pip install --break-system-packages -r requirements.txt
+# A separate requirements.txt is needed because there aren't rosdep keys for all dependencies
+RUN pip install --break-system-packages pynput
+COPY ../requirements.txt .
+RUN pip install --break-system-packages -r requirements.txt
