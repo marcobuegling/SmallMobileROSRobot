@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'motor_controller_node = robot_py.motor_controller_node:main',
         ],
     },
 )

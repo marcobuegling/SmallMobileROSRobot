@@ -3,7 +3,7 @@
 <package format="3">
   <name>robot_py</name>
   <version>0.0.0</version>
-  <description>Raspberry Pi Mobile Robot Project</description>
+  <description>Raspberry Pi Python Mobile Robot Project</description>
   <maintainer email="marco.buegling@mailbox.org">marcobuegling</maintainer>
   <license>Apache-2.0</license>
 
