@@ -20,9 +20,8 @@ class KeyboardControlNode(Node):
         # Node parameter declaration
         # potentially add key bindings as parameters to allow rebinding
         self.declare_parameter(
-            'steering_sensitivity', 
-            1.0, 
-            ParameterDescriptor(floating_point_range=[FloatingPointRange(0.0, 1.0, 0.0)])
+            'key_control_active', 
+            True
         )
         self.declare_parameter(
             'acceleration_sensitivity', 
@@ -30,8 +29,9 @@ class KeyboardControlNode(Node):
             ParameterDescriptor(floating_point_range=[FloatingPointRange(0.0, 1.0, 0.0)])
         )
         self.declare_parameter(
-            'key_control_active', 
-            True
+            'steering_sensitivity', 
+            1.0, 
+            ParameterDescriptor(floating_point_range=[FloatingPointRange(0.0, 1.0, 0.0)])
         )
         self.declare_parameter(
             'update_frequency', 

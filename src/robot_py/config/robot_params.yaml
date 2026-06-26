@@ -14,3 +14,10 @@ line_tracker:
   ros__parameters:
     enabled: false
     steering_step: 0.2
+
+keyboard_controller:
+  ros__parameters:
+    key_control_active: True
+    acceleration_sensitivity: 1.0
+    steering_sensitivity: 1.0
+    update_frequency: 20.0
