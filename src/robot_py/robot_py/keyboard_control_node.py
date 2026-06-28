@@ -6,7 +6,11 @@ from robot_interfaces.srv import StartStop
 from pynput import keyboard
 import threading
 
+# Define all possible control keys - possible change to node parameters in the future for customization
 CONTROL_KEYS = {keyboard.Key.up, keyboard.Key.down, keyboard.Key.left, keyboard.Key.right}
+
+# Max frequency at which control command messages are going to be published (in Hz)
+MAX_UPDATE_FREQUENCY = 100.0
 
 class KeyboardControlNode(Node):
     """
@@ -36,15 +40,18 @@ class KeyboardControlNode(Node):
         self.declare_parameter(
             'update_frequency', 
             20.0, 
-            ParameterDescriptor(description='Frequency of command updates in Hz.', floating_point_range=[FloatingPointRange(1.0, 100.0, 0.0)])
+            ParameterDescriptor(description='Frequency of command updates in Hz.', floating_point_range=[FloatingPointRange(1.0, MAX_UPDATE_FREQUENCY, 0.0)])
         )
-        # Cache values locally
+        # Cache values locally and calculate update interval
         self._key_control_active = self.get_parameter('key_control_active').value
         self._acceleration_sensitivity = self.get_parameter('acceleration_sensitivity').value
         self._steering_sensitivity = self.get_parameter('steering_sensitivity').value
+        self._update_frequency = self.get_parameter('update_frequency').value
 
         # Register callback for external changes of parameters
         self.add_on_set_parameters_callback(self._on_parameters_changed)
+
+        self._calculate_update_strength()
         
         # Track current speed and steering
         self._speed = 0.0 # values from -1.0 (full speed backwards) to 1.0 (full speed forwards)
@@ -59,22 +66,37 @@ class KeyboardControlNode(Node):
         self._start_stop_cli = self.create_client(StartStop, '/toggle_motors')
 
         # Create timer for publishing control commands
-        update_interval = 1 / self.get_parameter('update_frequency').value
-        self.timer = self.create_timer(timer_period_sec=update_interval, callback=self._publish_command)
+        self._update_interval = 1 / self._update_frequency
+        self.timer = self.create_timer(timer_period_sec=self._update_interval, callback=self._publish_command)
 
         # Create a lock for thread-safe updates, start thread for listener and listener itself
         self.lock = threading.Lock()
         self.listener_thread = threading.Thread(target=self._start_keyboard_listener)
         self.listener_thread.start()
 
+    def _calculate_update_strength(self):
+        """
+        Effective speed and steering update strength in a single step
+        Takes the update frequency relative to the maximum update frequency into account
+        Clipped to 1 (i.e. instant update in a single step)
+        """
+        self._speed_update_strength = max(1.0, self._acceleration_sensitivity * MAX_UPDATE_FREQUENCY / self._update_frequency)
+        self._steering_update_strength = max(1.0, self._steering_sensitivity * MAX_UPDATE_FREQUENCY / self._update_frequency)
+
     def _on_parameters_changed(self, params):
         for p in params:
             if p.name == 'key_control_active':
                 self._key_control_active = p.value
             elif p.name == 'acceleration_sensitivity':
-                self._accel_sensitivity = p.value
+                self._acceleration_sensitivity = p.value
             elif p.name == 'steering_sensitivity':
                 self._steer_sensitivity = p.value
+            elif p.name == 'update_frequency':
+                self._update_frequency = self.get_parameter('update_frequency').value
+                self._update_interval = 1 / self._update_frequency
+                self.timer.destroy()
+                self.timer = self.create_timer(timer_period_sec=self._update_interval, callback=self._publish_command)
+        self._calculate_update_strength()
         return SetParametersResult(successful=True)
 
     def toggle_key_control(self):
@@ -137,8 +159,8 @@ class KeyboardControlNode(Node):
             target_steering -= 1.0
 
         # Update speed with respect to update sensitivity
-        self._speed = self._speed + self._acceleration_sensitivity * (target_speed - self._speed)
-        self._steering = self._steering + self._steering_sensitivity * (target_steering - self._steering)
+        self._speed = self._speed + self._update_interval * self._acceleration_sensitivity * (target_speed - self._speed)
+        self._steering = self._steering + self._update_interval * self._steering_sensitivity * (target_steering - self._steering)
 
     def _publish_command(self):
         """Publishes a new message with a drive command."""

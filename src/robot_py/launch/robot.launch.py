@@ -1,9 +1,17 @@
+import os
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
 def generate_launch_description():
-    params = '/../config/robot_params.yaml'
+    # load robot parameters from config file
+    params = os.path.join(
+        get_package_share_directory('robot_py'),
+        'config',
+        'robot_params.yaml'
+    )
 
+    # launch nodes with parameters
     return LaunchDescription([
         Node(
             package='robot_py',

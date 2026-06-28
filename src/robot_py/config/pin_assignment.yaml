@@ -1,0 +1,33 @@
+# Pin numbers correspond to GPIO/BCM numbers (0 to 27), not the physical pin numbers (1 to 40)
+# These are only the pins used by software. For the full wiring, find more informations in the README
+
+# Pin definitions for the main motors including shared stby pin
+motors:
+  left:
+    rear:
+      pwm: 22
+      in1: 24
+      in2: 23
+    front:
+      pwm: 4
+      in1: 17
+      in2: 27
+  right:
+    rear:
+      pwm: 26
+      in1: 6
+      in2: 5
+    front:
+      pwm: 21
+      in1: 16
+      in2: 20
+  stby: 10
+
+# Pin definitions for the ultrasonic sensor
+ultrasonic_sensor:
+  trig: 18
+  echo: 25
+
+# Pin definitions for the line tracking sensor
+line_tracker:
+  signal: 12
