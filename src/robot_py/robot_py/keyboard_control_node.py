@@ -9,12 +9,14 @@ import threading
 # Define all possible control keys - possible change to node parameters in the future for customization
 CONTROL_KEYS = {keyboard.Key.up, keyboard.Key.down, keyboard.Key.left, keyboard.Key.right}
 
-# Max frequency at which control command messages are going to be published (in Hz)
+# Max and min frequency at which control command messages can be published (in Hz)
 MAX_UPDATE_FREQUENCY = 100.0
+MIN_UPDATE_FREQUENCY = 1.0
 
 class KeyboardControlNode(Node):
     """
     ROS node used for handling user input for mobile robots.
+    This node has two main functions:
     Control using arrow keys: publishes on topic 'car_control'
     Further actions: 'q': quit, 's': stop motors, 'd': start motors
     """
@@ -40,7 +42,7 @@ class KeyboardControlNode(Node):
         self.declare_parameter(
             'update_frequency', 
             20.0, 
-            ParameterDescriptor(description='Frequency of command updates in Hz.', floating_point_range=[FloatingPointRange(1.0, MAX_UPDATE_FREQUENCY, 0.0)])
+            ParameterDescriptor(description='Frequency of command updates in Hz.', floating_point_range=[FloatingPointRange(MIN_UPDATE_FREQUENCY, MAX_UPDATE_FREQUENCY, 0.0)])
         )
         # Cache values locally and calculate update interval
         self._key_control_active = self.get_parameter('key_control_active').value

@@ -1,5 +1,5 @@
 {
-  "name": "ROS2_Jazzy_test_ws",
+  "name": "ROS2-SMR",
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
