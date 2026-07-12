@@ -50,13 +50,9 @@ WORKDIR /home/$USERNAME
 # Source ROS 2 in every shell session
 RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 
-# Set the default shell to bash
-SHELL ["/bin/bash", "-c"]
-
 CMD ["/bin/bash"]
 
 # Install additional requirements defined in requirements.txt
 # A separate requirements.txt is needed because there aren't rosdep keys for all dependencies
-RUN pip install --break-system-packages pynput
 COPY ../requirements.txt .
 RUN pip install --break-system-packages -r requirements.txt
