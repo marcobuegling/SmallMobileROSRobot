@@ -23,13 +23,18 @@
     "vscode": {
       "extensions": [
         "ms-python.python",
-        "ms-python.pylance",
+        "ms-python.vscode-pylance",
+        "ms-iot.vscode-ros",
         "ranch-hand-robotics.rde-pack",
         "twxs.cmake",
         "ms-vscode.cmake-tools"
       ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "python.analysis.extraPaths": [
+          "${workspaceFolder}/install/robot_interfaces/lib/python3.12/site-packages"
+        ],
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "ros.distro": "jazzy"
       }
     }
   },

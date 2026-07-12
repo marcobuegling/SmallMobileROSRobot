@@ -38,6 +38,11 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
 
+# Workaround: vscode-ros hardcodes "/bin/sh --login" to source ROS setup scripts,
+# but Ubuntu's default /bin/sh (dash) doesn't support --login -> "Illegal option --".
+# Remove this once vscode-ros lets you configure the sourcing shell, or switches away from --login.
+RUN ln -sf /bin/bash /bin/sh
+
 # Switch to the new user
 USER $USERNAME
 WORKDIR /home/$USERNAME
