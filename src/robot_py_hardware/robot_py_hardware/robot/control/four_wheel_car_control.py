@@ -4,7 +4,6 @@ if sys.platform == "linux":
 else:
     GPIO = None
 from robot.hardware.motors import MotorGroup, Motor
-from robot.utils.config import FourWheelsMotorConfig, MotorSide, MotorPins
 
 class FourWheelCarControl:
     """
@@ -74,7 +73,7 @@ class FourWheelCarControl:
     @classmethod
     def from_config(
         cls, 
-        cfg: FourWheelsMotorConfig,
+        cfg,
         pwm_frequency: float = 1000.0,
         base_speed : float = 100.0, 
         speed_step: float = 0.1,

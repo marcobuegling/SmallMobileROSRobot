@@ -3,7 +3,6 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Bool
 from robot.control.four_wheel_car_control import FourWheelCarControl
-from robot.utils.config import RobotConfig
 
 class MotorControllerNode(Node):
     def __init__(self):
