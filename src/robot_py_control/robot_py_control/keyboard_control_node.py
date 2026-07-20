@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from rcl_interfaces.msg import ParameterDescriptor, FloatingPointRange, Parameter, SetParametersResult
-from robot_interfaces.msg import AckermannDriveCommand
+from geometry_msgs.msg import Twist
 from robot_interfaces.srv import StartStop
 from pynput import keyboard
 import threading
@@ -63,7 +63,7 @@ class KeyboardControlNode(Node):
         self._held_keys = set()
 
         # Create publisher for control commands as Ackermann drive commands (i.e. just speed and steering)
-        self._control_pub = self.create_publisher(AckermannDriveCommand, '/car_control', 10)
+        self._control_pub = self.create_publisher(Twist, '/car_control', 10)
         # Create service client for toggling motors activity
         self._start_stop_cli = self.create_client(StartStop, '/toggle_motors')
 
@@ -167,9 +167,9 @@ class KeyboardControlNode(Node):
     def _publish_command(self):
         """Publishes a new message with a drive command."""
         self._update_speed_and_steering()
-        msg = AckermannDriveCommand()
-        msg.speed = self._speed
-        msg.steering_angle = self._steering
+        msg = Twist()
+        msg.linear.x = self._speed
+        msg.angular.z = self._steering
         self._control_pub.publish(msg)
 
     def _start_keyboard_listener(self):

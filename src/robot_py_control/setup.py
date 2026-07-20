@@ -18,7 +18,7 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='marcbuegling',
+    maintainer='marcobuegling',
     maintainer_email='marco.buegling@mailbox.org',
     description='Control logic package for Raspberry Pi and Python Mobile Robot Project',
     license="Apache-2.0",

@@ -12,7 +12,8 @@
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
   <depend>std_msgs</depend>
-  <depend>robot_py_control_msgs</depend>
+  <depend>robot_interfaces</depend>
+  <depend>robot_py_hardware</depend>
 
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
