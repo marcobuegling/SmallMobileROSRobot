@@ -1,0 +1,19 @@
+command_mux:
+  ros__parameters:
+    publish_rate: 20.0          # Hz at which /cmd_vel is republished
+    stop_when_no_source: true   # publish zero Twist when nothing is alive
+    default_source: ""          # empty => pick highest-priority source at startup
+
+    sources:
+      keyboard:
+        topic: /cmd/keyboard
+        priority: 100
+        timeout: 0.5
+      line_follower:
+        topic: /cmd/line_follower
+        priority: 50
+        timeout: 0.5
+      target_follower:
+        topic: /cmd/target_follower
+        priority: 50
+        timeout: 0.5

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-dashboard.py
+robot_dashboard_node.py
 
 A ROS 2 Jazzy node for a small skid-steer mobile robot that subscribes to the
 command topic and all optional sensor topics, then renders a clean, live
@@ -18,6 +18,13 @@ setups but is still treated as "may go quiet"):
         True if a line is currently detected.
     /sensors/infrared         (std_msgs/msg/Bool)
         True if the IR sensor currently detects an obstacle/object.
+    /command_mux/active_source (std_msgs/msg/String)
+        Name of the command source currently controlling the robot, e.g.
+        "keyboard", "line_follower", or "target_follower". This topic is
+        subscribed with TRANSIENT_LOCAL durability so that this node (or any
+        other late-joining subscriber) immediately receives the mux's
+        current mode on startup, instead of showing "NO DATA" until the
+        active source happens to change again.
 
 Since not every sensor is always physically mounted, this node does not
 assume any topic is guaranteed to publish. Each topic's row shows "NO DATA"
@@ -39,10 +46,16 @@ from typing import Callable, Optional
 
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSPresetProfiles
+from rclpy.qos import (
+    QoSDurabilityPolicy,
+    QoSHistoryPolicy,
+    QoSPresetProfiles,
+    QoSProfile,
+    QoSReliabilityPolicy,
+)
 
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Bool, Float32
+from std_msgs.msg import Bool, Float32, String
 
 # Time after which a topic that has gone quiet is shown as "STALE" rather
 # than displaying its last known value as if it were still current.
@@ -133,12 +146,30 @@ class RobotDashboardNode(Node):
                 display_name="Infrared",
                 formatter=lambda v: "OBJECT DETECTED" if v else "clear",
             ),
+            "/command_mux/active_source": TopicState(
+                display_name="Active Source",
+                formatter=lambda v: v,
+            ),
         }
 
         # Sensor data on a small robot is typically fine to receive
         # best-effort; this also lets the node interoperate with sensor
         # drivers that publish with a sensor-data QoS profile.
         sensor_qos = QoSPresetProfiles.SENSOR_DATA.value
+
+        # The mux only publishes when the active source changes, so a
+        # regular (volatile) subscriber would show "NO DATA" until the next
+        # switch. TRANSIENT_LOCAL durability makes the publisher keep its
+        # last message available to late-joining subscribers, so this node
+        # gets the current mode immediately on startup. This requires the
+        # publisher side to also use TRANSIENT_LOCAL (and typically
+        # depth=1) for the two ends to be QoS-compatible.
+        active_source_qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
+            history=QoSHistoryPolicy.KEEP_LAST,
+            depth=1,
+        )
 
         self.create_subscription(
             Twist, "/cmd_vel", self._on_cmd_vel, 10
@@ -151,6 +182,12 @@ class RobotDashboardNode(Node):
         )
         self.create_subscription(
             Bool, "/sensors/infrared", self._on_infrared, sensor_qos
+        )
+        self.create_subscription(
+            String,
+            "/command_mux/active_source",
+            self._on_active_source,
+            active_source_qos,
         )
 
         # Redraw the dashboard on a fixed timer rather than only on message
@@ -179,6 +216,10 @@ class RobotDashboardNode(Node):
     def _on_infrared(self, msg: Bool) -> None:
         """Store the latest infrared boolean state."""
         self._states["/sensors/infrared"].update(msg.data)
+
+    def _on_active_source(self, msg: String) -> None:
+        """Store the currently active command_mux source name."""
+        self._states["/command_mux/active_source"].update(msg.data)
 
     # ------------------------------------------------------------------ #
     # Formatting helpers
