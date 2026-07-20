@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
-from robot.hardware.sensors import BasicSensor
+from robot_py_hardware.robot_py_hardware.basic_bool_sensor_node import BasicBoolSensorNode
 
 class LineTrackerNode(Node):
     def __init__(self):
@@ -11,7 +11,7 @@ class LineTrackerNode(Node):
         self.declare_parameter('enabled', False)
         self.declare_parameter('steering_step', 0.2)
 
-        self._sensor = BasicSensor.from_config(...)
+        self._sensor = BasicBoolSensorNode()
         self._steering_step = self.get_parameter('steering_step').value
 
         self._cmd_pub = self.create_publisher(Twist, '/cmd_vel_line', 10)
