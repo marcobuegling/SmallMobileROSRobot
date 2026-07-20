@@ -13,10 +13,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ros',
+    maintainer='marcobuegling',
     maintainer_email='marco.buegling@mailbox.org',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Launch and configuration files for Raspberry Pi Python Mobile Robot Project',
+    license='Apache-2.0',
     extras_require={
         'test': [
             'pytest',

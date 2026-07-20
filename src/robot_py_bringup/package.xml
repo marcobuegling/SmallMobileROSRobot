@@ -3,7 +3,7 @@
 <package format="3">
   <name>robot_py_bringup</name>
   <version>0.0.0</version>
-  <description>Raspberry Pi Python Mobile Robot Project bringup package containing launch files and configuration</description>
+  <description>Launch and configuration files for Raspberry Pi Python Mobile Robot Project</description>
   <maintainer email="marco.buegling@mailbox.org">marcobuegling</maintainer>
   <license>Apache-2.0</license>
 

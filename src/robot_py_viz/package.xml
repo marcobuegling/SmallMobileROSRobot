@@ -3,7 +3,7 @@
 <package format="3">
   <name>robot_py_viz</name>
   <version>0.0.1</version>
-  <description>Visualization tools package for Raspberry Pi and Python Mobile Robot Project</description>
+  <description>Visualization tools for Raspberry Pi and Python Mobile Robot Project</description>
   <maintainer email="marco.buegling@mailbox.org">marcobuegling</maintainer>
   <license>Apache-2.0</license>
   

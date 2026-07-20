@@ -20,7 +20,7 @@ setup(
     zip_safe=True,
     maintainer='marcobuegling',
     maintainer_email='marco.buegling@mailbox.org',
-    description='Control logic package for Raspberry Pi and Python Mobile Robot Project',
+    description='Control nodes for Raspberry Pi and Python Mobile Robot Project',
     license="Apache-2.0",
     extras_require={
         'test': [

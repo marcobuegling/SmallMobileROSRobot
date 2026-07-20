@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='marcobuegling',
     maintainer_email='marco.buegling@mailbox.org',
-    description='Visualization tools package for Raspberry Pi and Python Mobile Robot Project',
+    description='Visualization tools for Raspberry Pi and Python Mobile Robot Project',
     license='Apache-2.0',
     extras_require={
         'test': [
