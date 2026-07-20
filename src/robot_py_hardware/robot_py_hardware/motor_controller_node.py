@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Bool
-from robot.control.four_wheel_car_control import FourWheelCarControl
+from robot_py_hardware.robot_py_hardware.robot.control.skid_steer_car_control import SkidSteerCarControl
 
 class MotorControllerNode(Node):
     def __init__(self):
@@ -18,7 +18,7 @@ class MotorControllerNode(Node):
         base_speed = self.get_parameter('base_speed').value
 
         cfg = self._load_config()
-        self._control = FourWheelCarControl.from_config(
+        self._control = SkidSteerCarControl.from_config(
             cfg.motors,
             pwm_frequency=cfg.control.pwm_frequency,
             base_speed=base_speed,

@@ -5,10 +5,10 @@ else:
     GPIO = None
 from robot.hardware.motors import MotorGroup, Motor
 
-class FourWheelCarControl:
+class SkidSteerCarControl:
     """
-    Provides an interface for controlling a basic four wheel (and motor) car with common motor drivers like the TB6612FNG.
-    Each motor has three pins: PWM, IN1 and IN2. The motor drivers share one STBY pin.
+    Provides an interface for controlling a basic skid-steer four wheel car with common motor drivers like the TB6612FNG.
+    Each motor has three pins: PWM, IN1 and IN2. The motor drivers share one STBY pin in this setup.
     """
     def __init__(
         self, 

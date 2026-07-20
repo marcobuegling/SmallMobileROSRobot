@@ -7,6 +7,7 @@ else:
 class Motor:
     """
     Class defining a single motor using the corresponding output pins.
+    For use with common motor drivers like the TB6612FNG.
     This class provides basic functionality for speed control of the
     corresponding motor.
     """
@@ -62,9 +63,9 @@ class Motor:
 
 class MotorGroup:
     """
-    Class representing a group of motors that should be controlled together, e.g. the 
-    two motors on one side of a four wheel robot. 
-    This class provides an interface for controlling the motors, such that the single
+    Class representing a group of motors that should be controlled together, 
+    e.g. two motors on one side of a four wheel skid steer robot. 
+    This class provides an interface for controlling the motors, such that the 
     motors do not need to be controlled separately.
     """
     def __init__(self, motors: list[Motor], max_speed: float = 100.0):
