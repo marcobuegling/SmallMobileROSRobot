@@ -4,7 +4,7 @@
 Subscribes to several ``geometry_msgs/Twist`` command sources (e.g. keyboard
 teleop, line follower, target follower), selects exactly one of them
 according to an explicit service request combined with a priority/timeout
-fallback policy, and republishes the selection on ``/cmd_vel``. The
+fallback policy, and republishes the selection on ``/cmd_vel_raw``. The
 currently active source name is also published on a transient-local
 ("latched") topic so nodes that start later immediately learn the current
 state without waiting for the next change.
@@ -71,7 +71,7 @@ class CommandSource:
 
 
 class CommandMuxNode(Node):
-    """ROS 2 node that multiplexes several Twist sources onto ``/cmd_vel``."""
+    """ROS 2 node that multiplexes several Twist sources onto ``/cmd_vel_raw``."""
 
     def __init__(self) -> None:
         """Initialize parameters, sources, publishers, subscribers and the service."""
@@ -108,7 +108,7 @@ class CommandMuxNode(Node):
 
         self._active_source: Optional[str] = None
 
-        self._cmd_vel_pub = self.create_publisher(Twist, "/cmd_vel", 10)
+        self._cmd_vel_pub = self.create_publisher(Twist, "/cmd_vel_raw", 10)
 
         latched_qos = QoSProfile(
             depth=1,

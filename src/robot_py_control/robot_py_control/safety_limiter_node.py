@@ -92,7 +92,6 @@ class SafetyLimiterNode(Node):
             )
 
 
-
     def _cmd_input_callback(self, msg: Twist) -> None:
         """
         Filters incoming velocity commands: if an obstacle is currently
@@ -109,7 +108,6 @@ class SafetyLimiterNode(Node):
         filtered_msg.angular.z = msg.angular.z
  
         self._cmd_publisher.publish(filtered_msg)
-
 
 
 def main(args=None) -> None:
