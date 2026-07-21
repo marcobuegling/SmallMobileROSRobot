@@ -52,8 +52,6 @@ class LineTrackerControlNode(Node):
         super().__init__("line_tracker_control_node")
 
         # --- Parameters ---
-        # Kept intentionally minimal: just enough to retune behavior per
-        # robot/surface without touching code.
         self.declare_parameter("sensor_topic", "/line_tracker")
         self.declare_parameter("cmd_topic", "/cmd/line_follower")
         self.declare_parameter("speed", 0.3)                # forward speed, -1..1
@@ -75,6 +73,7 @@ class LineTrackerControlNode(Node):
             Bool, sensor_topic, self._sensor_callback, 10
         )
 
+        # --- Logging ---
         self.get_logger().info(
             f"LineTrackerControlNode started: "
             f"listening on '{sensor_topic}', publishing to '{cmd_topic}' "

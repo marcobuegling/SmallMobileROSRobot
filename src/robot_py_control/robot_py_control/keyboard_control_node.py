@@ -63,7 +63,7 @@ class KeyboardControlNode(Node):
         self._held_keys = set()
 
         # Create publisher for control commands as Ackermann drive commands (i.e. just speed and steering)
-        self._control_pub = self.create_publisher(Twist, '/car_control', 10)
+        self._control_pub = self.create_publisher(Twist, '/cmd/keyboard', 10)
         # Create service client for toggling motors activity
         self._start_stop_cli = self.create_client(StartStop, '/toggle_motors')
 
