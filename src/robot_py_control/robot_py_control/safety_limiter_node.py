@@ -54,7 +54,7 @@ class SafetyLimiterNode(Node):
         self.get_logger().info(
             f"Safety limiter node started: subscribing to '{input_topic}' "
             f"and '{us_sensor_topic}', publishing filtered commands to "
-            f"'{output_topic}'. Stopping distance: {stopping_distance:.1f} m."
+            f"'{output_topic}'. Stopping distance: {self._stopping_distance:.1f} m."
         )
 
     def _us_sensor_callback(self, msg: Range) -> None:
@@ -69,7 +69,8 @@ class SafetyLimiterNode(Node):
         self._obstacle_detected = msg.range <= self._stopping_distance
  
         if self._obstacle_detected and not was_obstacle_detected:
-            
+
+            # Send stop command
             safety_stop_cmd = Twist()
             safety_stop_cmd.linear.x = 0.0
             safety_stop_cmd.linear.y = 0.0
